@@ -180,6 +180,7 @@ public class DeviceControlActivity extends Activity {
         final EditText sendEditText = (EditText) findViewById(R.id.send_value);
         String message = sendEditText.getText().toString();
         Log.e("BluetoothSend", "Will send " + message);
+        mBluetoothLeService.writeCharacteristic(null, message);
     }
 
     @Override

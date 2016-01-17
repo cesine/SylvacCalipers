@@ -48,6 +48,7 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
+    private BluetoothGattCharacteristic mLastCharacteristic;
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -109,6 +110,12 @@ public class BluetoothLeService extends Service {
         }
 
         @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            Log.e("BluetoothWrite", "writing to characteristic " + characteristic.getUuid());
+            super.onCharacteristicWrite(gatt, characteristic, status);
+        }
+
+        @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
@@ -123,6 +130,7 @@ public class BluetoothLeService extends Service {
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
+        mLastCharacteristic = characteristic;
 
         // This is special handling for the Heart Rate Measurement profile.  Data parsing is
         // carried out as per profile specifications:
@@ -321,6 +329,19 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.readCharacteristic(characteristic);
     }
 
+    public void writeCharacteristic(BluetoothGattCharacteristic characteristic, String message){
+        if (characteristic == null){
+            characteristic = mLastCharacteristic;
+        }
+
+        if (characteristic == null || message == null || "".equals(message)){
+            Log.e("BluetoothWwrite", "write requested but missing characteristic and message to write.");
+            return;
+        }
+        message = message + "\n";
+        Log.e("BluetoothWrite", "requeseted write to " + characteristic.getUuid() + " message: " + message);
+        characteristic.setValue(message.getBytes());
+    }
     /**
      * Enables or disables notification on a give characteristic.
      *
