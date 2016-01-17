@@ -32,6 +32,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,7 +147,45 @@ public class BluetoothLeService extends Service {
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
                 for(byte byteChar : data)
                     stringBuilder.append(String.format("%02X ", byteChar));
+                String utf8String = "";
+                try {
+                    utf8String = new String(data, "UTF8");
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                List<BluetoothGattDescriptor> gattDescriptors = characteristic.getDescriptors();
+                for (BluetoothGattDescriptor gattDescriptor: gattDescriptors){
+                    if (gattDescriptor == null) {
+                        Log.e("BluetoothDescriptor",
+                                "characteristic: " + characteristic.getUuid() +
+                                        " descriptor: " + gattDescriptor.getUuid().toString() +
+                                        " value: " + new String(gattDescriptor.getValue()));
+                    } else {
+                        Log.e("BluetoothDescriptor", "descriptor was null");
+                    }
+                }
                 intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+                Log.e("BluetoothValue",
+                        "service: " + characteristic.getService().getUuid() +
+                                " characteristic: " + characteristic.getUuid() +
+                                " description: " +
+                                " type: " + characteristic.getWriteType() +
+                                " string: " + new String(data) +
+
+                                " float: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_FLOAT, 1) +
+                                " sfloat: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SFLOAT, 1) +
+
+                                " sint8: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 1) +
+                                " sint16: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 1) +
+                                " sint32: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32, 1) +
+
+                                " uint8: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1) +
+                                " uint16: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1) +
+                                " uint32: " + characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 1) +
+
+                                " utf8: " + utf8String +
+                                " stringValue: " + characteristic.getStringValue(0) +
+                                " hex: " + stringBuilder.toString());
             }
         }
         sendBroadcast(intent);
