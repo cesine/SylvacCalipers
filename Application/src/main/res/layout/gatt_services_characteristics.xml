@@ -65,6 +65,18 @@
                   android:text="@string/no_data"
                   android:textSize="18sp"/>
     </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText android:id="@+id/send_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button android:onClick="sendMessage"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="@string/send"/>
+    </LinearLayout>
     <ExpandableListView android:id="@+id/gatt_services_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
