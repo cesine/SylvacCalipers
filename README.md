@@ -1,14 +1,36 @@
 
-Android BluetoothLeGatt Sample
+Reverse Engineering Sylvac Calipers
 ===================================
 
-This sample demonstrates how to use the Bluetooth LE Generic Attribute Profile (GATT)
+This uses the Android Bluetooth Low Energy sample codebase to read Generic Attribute Profile (GATT)
 to transmit arbitrary data between devices.
+
+Specifications
+--------------
+
+The S CAL EVO Calipers have three services/profiles. The first service offers 3 characteristics which can be read, the second service offers no characteristics and the third service offers 4 characteristics.
+
+The UUID for these services and characteristics are listed in [SCalEvoBluetoothSpecifications.java](Application/src/main/java/ch/sylvac/calipers/SCalEvoBluetoothSpecifications.java). Currently we dont know what these services are for, nor what the characteristics mean but we have named them so that as we discover what they mean we annotate them.
+
+References
+-------
+
+* [S CAL EVO User Guide](http://www.sylvac.ch/download-en/manuals/hand-tools/caliper-s-cal-evo)
+
+* [Sylvac Android App](https://play.google.com/store/apps/details?id=com.sylvac.sylvacbt_smart_demo)
+
+* [Sylvac's website](http://www.sylvac.ch)
+
+The S_CAL_EVO calipers dont appear to follow any existing profiles for mesurement devices:
+
+* [Bluetooth profiles](https://www.bluetooth.com/specifications/adopted-specifications)
+
+* [Bluetooth characteristics](https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicsHome.aspx)
 
 Introduction
 ------------
 
-This sample shows a list of available Bluetooth LE devices and provides
+This sample can list all available Bluetooth LE devices and provides
 an interface to connect, display data and display GATT services and
 characteristics supported by the devices.
 
@@ -30,7 +52,7 @@ Pre-requisites
 Screenshots
 -------------
 
-<img src="screenshots/1-main.png" height="400" alt="Screenshot"/> <img src="screenshots/2-detail.png" height="400" alt="Screenshot"/> 
+<img src="screenshots/1-main.png" height="400" alt="Screenshot"/> <img src="screenshots/2-detail.png" height="400" alt="Screenshot"/>
 
 Getting Started
 ---------------
@@ -38,17 +60,6 @@ Getting Started
 This sample uses the Gradle build system. To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
 
-Support
--------
-
-- Google+ Community: https://plus.google.com/communities/105153134372062985968
-- Stack Overflow: http://stackoverflow.com/questions/tagged/android
-
-If you've found an error in this sample, please file an issue:
-https://github.com/googlesamples/android-BluetoothLeGatt
-
-Patches are encouraged, and may be submitted by forking this project and
-submitting a pull request through GitHub. Please see CONTRIBUTING.md for more details.
 
 License
 -------
