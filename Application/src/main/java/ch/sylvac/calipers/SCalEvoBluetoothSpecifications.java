@@ -27,11 +27,13 @@ public class SCalEvoBluetoothSpecifications {
     public static String CHARACTERISTIC_M = "00002a00-0000-1000-8000-00805f9b34fb";
     public static String CHARACTERISTIC_N = "00002a01-0000-1000-8000-00805f9b34fb";
     public static String CHARACTERISTIC_O = "00002a04-0000-1000-8000-00805f9b34fb";
+    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
     public static String DATA_RECEIVED = "c1b25010-caaf-6d0e-4c33-7dae30052840";
     public static String NOT_USED = "c1b25011-caaf-6d0e-4c33-7dae30052840";
     public static String DATA_REQUEST_OR_COMMAND = "c1b25012-caaf-6d0e-4c33-7dae30052840";
     public static String ANSWER_TO_REQUEST_OR_COMMAND = "c1b25013-caaf-6d0e-4c33-7dae30052840";
+
 //01-23 16:25:53.272 777-1803/? D/BtGatt.GattService: onNotify() - address=D1:52:BE:F4:18:2C, charUuid=c1b25013-caaf-6d0e-4c33-7dae30052840, length=8
 
     static {
