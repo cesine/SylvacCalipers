@@ -322,6 +322,15 @@ public class BluetoothLeService extends Service {
         Log.e("BluetoothWrite", "requeseted write to " + characteristic.getUuid() + " message: " + message);
         characteristic.setValue(message.getBytes());
     }
+
+    public void writeDescriptor(BluetoothGattDescriptor descriptor){
+        if (descriptor == null){
+            Log.e(TAG, "descriptor " + descriptor.getUuid() + "was null");
+            return;
+        }
+        mBluetoothGatt.writeDescriptor(descriptor);
+    }
+
     /**
      * Enables or disables notification on a give characteristic.
      *

@@ -18,6 +18,7 @@ package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import ch.sylvac.calipers.SCalEvoBluetoothSpecifications;
 
@@ -64,6 +66,10 @@ public class DeviceControlActivity extends Activity {
             new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
+
+    public static BluetoothGattCharacteristic mDataReceivedCharacteristic;
+    public static BluetoothGattCharacteristic mDataRequestOrCommandCharacteristic;
+    public static BluetoothGattCharacteristic mAnswerToDataRequestOrCommandCharacteristic;
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
@@ -102,6 +108,7 @@ public class DeviceControlActivity extends Activity {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
                 invalidateOptionsMenu();
+                listenToCalipersDataButton();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
@@ -140,9 +147,7 @@ public class DeviceControlActivity extends Activity {
                             mBluetoothLeService.readCharacteristic(characteristic);
                         }
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                            mNotifyCharacteristic = characteristic;
-                            mBluetoothLeService.setCharacteristicNotification(
-                                    characteristic, true);
+                            listenToCaliperCharacteristic(characteristic);
                         }
                         return true;
                     }
@@ -176,11 +181,48 @@ public class DeviceControlActivity extends Activity {
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
-    public void sendMessage(View v){
+
+    public void sendMessage(View v) {
         final EditText sendEditText = (EditText) findViewById(R.id.send_value);
         String message = sendEditText.getText().toString();
-        Log.e("BluetoothSend", "Will send " + message);
-        mBluetoothLeService.writeCharacteristic(null, message);
+        if (mDataRequestOrCommandCharacteristic == null) {
+            Log.e("BluetoothSend", "Cant send " + message);
+            return;
+        }
+        Log.e("BluetoothSend", "Sending " + message);
+        mBluetoothLeService.writeCharacteristic(mDataRequestOrCommandCharacteristic, message);
+        listenToCaliperChanges();
+    }
+
+    public void listenToCalipersDataButton() {
+        listenToCaliperCharacteristic(mDataReceivedCharacteristic);
+    }
+
+    public void listenToCaliperChanges() {
+        listenToCaliperCharacteristic(mAnswerToDataRequestOrCommandCharacteristic);
+    }
+
+    public void listenToCaliperCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (characteristic == null) {
+            Log.e(TAG, "Cant listen to characteristic");
+            return;
+        }
+
+        Log.d(TAG, "Starting to listen to notifications from " + characteristic.getUuid());
+        final int charaProp = characteristic.getProperties();
+        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+            mNotifyCharacteristic = characteristic;
+            mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+
+            // Set descriptor to enable notifications
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SCalEvoBluetoothSpecifications.CLIENT_CHARACTERISTIC_CONFIG));
+            if (descriptor == null) {
+                Log.e(TAG, "descriptor " + SCalEvoBluetoothSpecifications.CLIENT_CHARACTERISTIC_CONFIG + "was null");
+                return;
+            }
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothLeService.writeDescriptor(descriptor);
+        }
     }
 
     @Override
@@ -291,6 +333,14 @@ public class DeviceControlActivity extends Activity {
                         LIST_NAME, SCalEvoBluetoothSpecifications.lookup(uuid, unknownCharaString));
                 currentCharaData.put(LIST_UUID, uuid);
                 gattCharacteristicGroupData.add(currentCharaData);
+
+                if (SCalEvoBluetoothSpecifications.DATA_RECEIVED.equals(uuid)) {
+                    mDataReceivedCharacteristic = gattCharacteristic;
+                } else if (SCalEvoBluetoothSpecifications.ANSWER_TO_REQUEST_OR_COMMAND.equals(uuid)) {
+                    mAnswerToDataRequestOrCommandCharacteristic = gattCharacteristic;
+                } else if (SCalEvoBluetoothSpecifications.DATA_REQUEST_OR_COMMAND.equals(uuid)) {
+                    mDataRequestOrCommandCharacteristic = gattCharacteristic;
+                }
             }
             mGattCharacteristics.add(charas);
             gattCharacteristicData.add(gattCharacteristicGroupData);
