@@ -1,9 +1,8 @@
-
 Reverse Engineering Sylvac Calipers
 ===================================
 
 This uses the Android Bluetooth Low Energy sample codebase to read Generic Attribute Profile (GATT)
-to transmit arbitrary data between devices.
+to transmit arbitrary data between devices. It has customization for the Sylvac calipers.
 
 Specifications
 --------------
@@ -11,6 +10,19 @@ Specifications
 The S CAL EVO Calipers have three services/profiles. The first service offers 3 characteristics which can be read, the second service offers no characteristics and the third service offers 4 characteristics.
 
 The UUID for these services and characteristics are listed in [SCalEvoBluetoothSpecifications.java](Application/src/main/java/ch/sylvac/calipers/SCalEvoBluetoothSpecifications.java). Currently we dont know what these services are for, nor what the characteristics mean but we have named them so that as we discover what they mean we annotate them.
+
+Buttons
+-------
+
+There are two buttons, one for requesting manual data, one for connecting or disconnecting from the calipers.
+
+Changing the mode is done by two steps:
+
+1. Set the characteristic notificaiton to true
+* mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+1. Set the value of the descriptor to enable notification
+* descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+
 
 References
 -------
@@ -32,7 +44,7 @@ Introduction
 
 This sample can list all available Bluetooth LE devices and provides
 an interface to connect, display data and display GATT services and
-characteristics supported by the devices.
+characteristics supported by any device.
 
 It creates a [Service][1] for managing connection and data communication with a GATT server
 hosted on a given Bluetooth LE device.
