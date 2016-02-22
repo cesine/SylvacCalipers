@@ -3,20 +3,19 @@ package ch.sylvac.calipers;
 import java.util.HashMap;
 
 /**
- *
  * http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
-
- *
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: 00001800-0000-1000-8000-00805f9b34fb
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a00-0000-1000-8000-00805f9b34fb
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a01-0000-1000-8000-00805f9b34fb
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a04-0000-1000-8000-00805f9b34fb
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: 00001801-0000-1000-8000-00805f9b34fb
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: c1b25000-caaf-6d0e-4c33-7dae30052840
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25010-caaf-6d0e-4c33-7dae30052840
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25011-caaf-6d0e-4c33-7dae30052840
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25012-caaf-6d0e-4c33-7dae30052840
- 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25013-caaf-6d0e-4c33-7dae30052840
+ * <p/>
+ * <p/>
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: 00001800-0000-1000-8000-00805f9b34fb
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a00-0000-1000-8000-00805f9b34fb
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a01-0000-1000-8000-00805f9b34fb
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: 00002a04-0000-1000-8000-00805f9b34fb
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: 00001801-0000-1000-8000-00805f9b34fb
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothService: c1b25000-caaf-6d0e-4c33-7dae30052840
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25010-caaf-6d0e-4c33-7dae30052840
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25011-caaf-6d0e-4c33-7dae30052840
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25012-caaf-6d0e-4c33-7dae30052840
+ * 01-17 19:09:17.393 14559-14559/com.example.android.bluetoothlegatt E/BluetoothCharacteristic: c1b25013-caaf-6d0e-4c33-7dae30052840
  */
 public class SCalEvoBluetoothSpecifications {
     private static HashMap<String, String> attributes = new HashMap();
@@ -33,8 +32,6 @@ public class SCalEvoBluetoothSpecifications {
     public static String NOT_USED = "c1b25011-caaf-6d0e-4c33-7dae30052840";
     public static String DATA_REQUEST_OR_COMMAND = "c1b25012-caaf-6d0e-4c33-7dae30052840";
     public static String ANSWER_TO_REQUEST_OR_COMMAND = "c1b25013-caaf-6d0e-4c33-7dae30052840";
-
-//01-23 16:25:53.272 777-1803/? D/BtGatt.GattService: onNotify() - address=D1:52:BE:F4:18:2C, charUuid=c1b25013-caaf-6d0e-4c33-7dae30052840, length=8
 
     static {
         // Services
